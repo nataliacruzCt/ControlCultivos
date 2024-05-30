@@ -1,0 +1,626 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Agro: Control cultivos",
+    "version": "1.0",
+    "description": "API para microservicio de Core-domain de AGRO: Control Cultivos"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    },
+    {
+      "url": "https://crop-control-production-cwzwt6i3bq-uc.a.run.app"
+    },
+    {
+      "url": "http://agro.app/control-cultivos"
+    }
+  ],
+  "paths": {
+    "/cultivos/{uuid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "example": "6fe9fdbd-c48d-468a-b062-75a335509d58"
+          },
+          "name": "uuid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Obtener información de un cultivo por su UUID",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Crop Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cultivo"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                      "variedad": "string",
+                      "fecha_siembra": "2019-08-24T14:15:22Z",
+                      "sistema_siembra": "string",
+                      "tipo": "VEGETAL",
+                      "planta": "Patata",
+                      "fecha_creacion": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        },
+        "operationId": "getCropsByUUID",
+        "description": "Obtiene la informacion de un cultivo."
+      },
+      "patch": {
+        "summary": "Actualizar información de un cultivo",
+        "operationId": "patchCropByUUID",
+        "responses": {
+          "200": {
+            "description": "Cultivo Actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cultivo"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                      "variedad": "string",
+                      "fecha_siembra": "2019-08-24T14:15:22Z",
+                      "sistema_siembra": "string",
+                      "tipo": "VEGETAL",
+                      "planta": "Patata",
+                      "fecha_creacion": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        },
+        "description": "Actualiza la información de un cultivo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-examples": {
+                  "Example 1": {
+                    "variedad": "Leguminosas",
+                    "fecha_siembra": "2020-04-01",
+                    "sistema_siembra": "Standard",
+                    "tipo": "VEGETAL",
+                    "planta": "Patata"
+                  }
+                },
+                "properties": {
+                  "variedad": {
+                    "type": "string"
+                  },
+                  "fecha_siembra": {
+                    "type": "string"
+                  },
+                  "sistema_siembra": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "variedad": "string",
+                    "fecha_siembra": "string",
+                    "sistema_siembra": "string"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch user properties to update."
+        }
+      }
+    },
+    "/cultivos/{uuid}/cosechas": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "example": "6fe9fdbd-c48d-468a-b062-75a335509d58"
+          },
+          "name": "uuid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Obtener información de cosechas asociadas a un cultivo",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "Crop Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cosecha"
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      {
+                        "tipo": "TOTAL",
+                        "cantidad_producida": "2",
+                        "unidad": "KG",
+                        "notas": "Excelente cosecha"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        },
+        "operationId": "getCropHarvestsByUUID",
+        "description": "Obtiene la informacion de las cosechas de un cultivo."
+      },
+      "post": {
+        "summary": "Agregar información de cosecha de un cultivo",
+        "operationId": "postHarvestByCropUUID",
+        "description": "Agregar una nueva cosecha a un cultivo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cosecha"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Crop created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cosecha"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        }
+      }
+    },
+    "/cultivos": {
+      "post": {
+        "summary": "Crear nuevo cultivo",
+        "operationId": "postNewCrop",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cultivo"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "variedad": "Leguminosas",
+                        "fecha_siembra": "2019-08-24T14:15:22Z",
+                        "sistema_siembra": "string",
+                        "tipo": "VEGETAL",
+                        "planta": "Patata",
+                        "fecha_creacion": "2019-08-24"
+                      },
+                      {
+                        "id": "947f6eac-6789-4993-bfeb-98cbbbba6f08",
+                        "variedad": "Cereales",
+                        "fecha_siembra": "2019-08-24T14:15:22Z",
+                        "sistema_siembra": "string",
+                        "tipo": "VEGETAL",
+                        "planta": "Trigo",
+                        "fecha_creacion": "2019-08-24"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-examples": {
+                  "Example 1": {
+                    "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                    "variedad": "string",
+                    "fecha_siembra": "2019-08-24T14:15:22Z",
+                    "sistema_siembra": "string",
+                    "tipo": "VEGETAL",
+                    "planta": "Patata",
+                    "fecha_creacion": "2019-08-24"
+                  }
+                },
+                "properties": {
+                  "variedad": {
+                    "type": "string"
+                  },
+                  "fecha_siembra": {
+                    "type": "string"
+                  },
+                  "sistema_siembra": {
+                    "type": "string"
+                  },
+                  "tipo": {
+                    "type": "string"
+                  },
+                  "planta": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "variedad",
+                  "sistema_siembra",
+                  "tipo",
+                  "planta"
+                ]
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "variedad": "Leguminosas",
+                    "fecha_siembra": "2020-04-01",
+                    "sistema_siembra": "Standard",
+                    "tipo": "VEGETAL",
+                    "planta": "Patata"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Envia los campos necesarios para crear un nuevo cultivo"
+        },
+        "description": "Crea un nuevo cultivo"
+      },
+      "parameters": [],
+      "get": {
+        "summary": "Obtener cultivos",
+        "operationId": "getCrops",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "variedad",
+            "description": "Variedad de cultivos a buscar",
+            "example": "Leguminosas"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "fecha_siembra[0]",
+            "description": "Rango de inicial de fecha de siembra",
+            "example": "2020-04-01T00:00:00.000Z"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "fecha_siembra[1]",
+            "description": "Rango de final de fecha de siembra",
+            "example": "2020-04-01T00:00:00.000Z"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cultivo"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "variedad": "Leguminosas",
+                        "fecha_siembra": "2019-08-24T14:15:22Z",
+                        "sistema_siembra": "string",
+                        "tipo": "VEGETAL",
+                        "planta": "Patata",
+                        "fecha_creacion": "2019-08-24"
+                      },
+                      {
+                        "id": "947f6eac-6789-4993-bfeb-98cbbbba6f08",
+                        "variedad": "Cereales",
+                        "fecha_siembra": "2019-08-24T14:15:22Z",
+                        "sistema_siembra": "string",
+                        "tipo": "VEGETAL",
+                        "planta": "Trigo",
+                        "fecha_creacion": "2019-08-24"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        },
+        "description": "Devuelve un listado de cultivos registrados"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cultivo": {
+        "title": "Cultivo",
+        "type": "object",
+        "description": "Descripción del Modelo cultivo",
+        "examples": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "variedad": "string",
+            "fecha_siembra": "2019-08-24T14:15:22Z",
+            "sistema_siembra": "string",
+            "tipo": "VEGETAL",
+            "planta": "Patata",
+            "fecha_creacion": "2019-08-24"
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the given crop.",
+            "format": "uuid"
+          },
+          "variedad": {
+            "type": "string"
+          },
+          "fecha_siembra": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sistema_siembra": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "VEGETAL",
+              "FRUTA",
+              "ARBOL",
+              "FLOR",
+              "HierBA"
+            ]
+          },
+          "planta": {
+            "type": "string",
+            "example": "Patata"
+          },
+          "fecha_creacion": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the crop was created."
+          }
+        },
+        "required": [
+          "id",
+          "variedad",
+          "fecha_siembra",
+          "sistema_siembra",
+          "tipo"
+        ],
+        "x-stoplight": {
+          "id": "f4904e5cc1223"
+        }
+      },
+      "Cosecha": {
+        "title": "Cosecha",
+        "type": "object",
+        "description": "Descripción del Modelo Cosecha",
+        "examples": [
+          {
+            "tipo": "TOTAL",
+            "cantidad_producida": "2",
+            "unidad": "KG",
+            "notas": "Excelente cosecha"
+          }
+        ],
+        "properties": {
+          "cantidad_producida": {
+            "type": "float"
+          },
+          "fecha_siembra": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sistema_siembra": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "TOTAL",
+              "PARCIAL"
+            ]
+          },
+          "planta": {
+            "type": "string",
+            "example": "Patata"
+          },
+          "fecha_creacion": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the user was created."
+          }
+        },
+        "required": [
+          "id",
+          "variedad",
+          "fecha_siembra",
+          "sistema_siembra",
+          "tipo"
+        ],
+        "x-stoplight": {
+          "id": "1e9694e22dbaa"
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "code": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "code": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Invalid Operation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "code": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  }
+}
